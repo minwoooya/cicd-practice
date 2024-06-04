@@ -1,16 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Grey2 } from "../../styles/color";
 import { LoginButton } from "../login/LoginSection";
+import { useLocation, useNavigate } from "react-router-dom";
+import { instance } from "../../../src/api/instance.js";
 
 function WritePostSection() {
   //TODOS
-  // 1. 글쓰기 
+  // 1. 글쓰기
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "title") {
+      setTitle(value);
+    } else {
+      setContent(value);
+    }
+  };
+
+  const postPostdata = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const body = {
+      title: title,
+      content: content,
+    };
+    try {
+      const res = await instance.post("/board/post-create/", body, { headers });
+      if (res.status === 201) {
+        navigate("/");
+        alert("글 작성 완료~~");
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <WritePostSectionWrapper>
-      <TitleInput placeholder="제목을 입력해주세요" maxLength={30} />
-      <ContentTextArea placeholder="내용을 입력해주세요" maxLength={200} />
-      <PostButton>글 작성하기</PostButton>
+      <TitleInput
+        name="title"
+        onChange={handleInputChange}
+        placeholder="제목을 입력해주세요"
+        maxLength={30}
+      />
+      <ContentTextArea
+        name="content"
+        onChange={handleInputChange}
+        placeholder="내용을 입력해주세요"
+        maxLength={200}
+      />
+      <PostButton onClick={postPostdata}>글 작성하기</PostButton>
     </WritePostSectionWrapper>
   );
 }

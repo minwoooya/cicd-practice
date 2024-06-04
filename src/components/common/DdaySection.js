@@ -28,7 +28,7 @@ function DdaySection() {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => clearInterval(timer); // 타이머 해제를 해주지 않으면 새로고침마다 타이머가 쌓임
   }, []);
 
   return (

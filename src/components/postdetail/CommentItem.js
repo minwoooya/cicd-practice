@@ -2,19 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { Body2 } from "../../styles/font";
 import { Grey1 } from "../../styles/color";
+import dayjs from "dayjs";
 
-function CommentItem() {
+function CommentItem({ content, created_at, user }) {
   return (
     <CommentItemWrapper>
       <div className="row-1">
-        <Body2>정인영</Body2>
-        <Body2 color={Grey1}>24.05.20 19:20</Body2>
+        <Body2>{user}</Body2>
+        <Body2 color={Grey1}>{dayjs(created_at).format("MM-DD HH:mm")}</Body2>
       </div>
       <div className="content">
-        <Body2>
-          수고했어 오늘도 수고했어 아무도 나의 슬픔의 관심 없어도 난 늘 응원해
-          수고했어 오늘도!
-        </Body2>
+        <Body2>{content}</Body2>
       </div>
     </CommentItemWrapper>
   );
@@ -30,4 +28,5 @@ const CommentItemWrapper = styled.div`
     margin-top: 0.5rem;
   }
 `;
-export default CommentItem;
+
+export default React.memo(CommentItem);
